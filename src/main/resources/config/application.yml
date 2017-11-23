@@ -1,0 +1,53 @@
+# Server settings
+server:
+    port: 8080
+    address: 127.0.0.1
+
+# spring
+spring:
+    datasource:
+        name: dataSource
+        url: jdbc:mysql://localhost:3306/forum?serverTimezone=Asia/Shanghai
+        username: root
+        password: marine
+        driver-class-name: com.mysql.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        druid:
+          maxActiv: 20
+          maxActive: 20
+          initialSize: 1
+          maxWait: 60000
+          minIdle: 1
+          timeBetweenEvictionRunsMillis: 60000
+          minEvictableIdleTimeMillis: 300000
+          validationQuery: select 'x'
+          testWhileIdle: true
+          testOnBorrow: false
+          testOnReturn: false
+          poolPreparedStatements: true
+          maxOpenPreparedStatements: 20
+          web-stat-filter:
+            exclusions: stat
+    http:
+      encoding:
+        charset: utf-8
+        enabled: true
+        force: true
+
+# mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.swroom.base.model.po
+
+# mapper
+mapper:
+    not-empty: false
+    identity: MYSQL
+
+# pagehelper
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+

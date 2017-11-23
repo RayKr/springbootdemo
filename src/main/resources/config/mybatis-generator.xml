@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <!-- flat:为每张表生成一个实体类，简单实用 -->
+    <context id="mysqlTables" defaultModelType="flat" targetRuntime="MyBatis3Simple">
+
+        <!-- 自定义注释编码格式 -->
+        <property name="javaFileEncoding" value="UTF-8"/>
+
+        <!-- 防止出现含有空格的表名，使用分隔符保证表名的正确性 select * from `user table` -->
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <!-- 使用通用mapper3插件 -->
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
+        </plugin>
+
+        <!-- 屏蔽时间戳和注释，防止每次生成都会提示版本控制 -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <!-- 数据库连接配置 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/forum?serverTimezone=Asia/Shanghai"
+                        userId="root"
+                        password="marine"/>
+
+        <!-- 指定生成的类型为java类型，避免数据库中number等类型字段 -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 生成model模型，对应的包，存放位置可以指定具体的路径,如/ProjectName/src，也可以使用MAVEN来自动生成 -->
+        <javaModelGenerator targetPackage="${targetModelPackage}" targetProject="${targetJavaProject}">
+            <property name="enableSubPackages" value="true"/>
+            <!-- 去掉char类型不必要的空格 -->
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <!--对应的xml mapper文件  -->
+        <sqlMapGenerator targetPackage="${targetXMLPackage}" targetProject="${targetResourcesProject}">
+            <!-- MBG会根据catalog和schema来生成子包 -->
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- 对应的dao接口 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="${targetMapperPackage}" targetProject="${targetJavaProject}">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- 生成所有的表 -->
+        <table tableName="forum_user">
+            <!-- 指定主键列 -->
+            <generatedKey column="user_id" sqlStatement="Mysql" identity="true"/>
+            <!-- 正则去除前缀字符串 -->
+            <!--<columnRenamingRule searchString="^CUST_" replaceString="" />-->
+        </table>
+    </context>
+
+</generatorConfiguration>
